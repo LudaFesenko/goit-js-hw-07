@@ -26,7 +26,6 @@ const instance = basicLightbox.create(
     onShow(instance) {
       modalCloseHandler = (event) => {
         if (event.code === "Escape") {
-          console.log("close");
           instance.close();
         }
       };
