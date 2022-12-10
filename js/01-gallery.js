@@ -16,10 +16,28 @@ const renderItem = (item) => `
 const itemsMarkup = galleryItems.map(renderItem).join("");
 
 const gallery = document.querySelector("div.gallery");
+gallery.insertAdjacentHTML("afterbegin", itemsMarkup);
 
-const instance = basicLightbox.create(`
-    <img src="" class="js-modal-img" width="800" height="600">
-`);
+let modalCloseHandler;
+
+const instance = basicLightbox.create(
+  `<img src="" class="js-modal-img" width="800" height="600">`,
+  {
+    onShow(instance) {
+      modalCloseHandler = (event) => {
+        if (event.code === "Escape") {
+          console.log("close");
+          instance.close();
+        }
+      };
+
+      document.addEventListener("keyup", modalCloseHandler);
+    },
+    onClose() {
+      document.removeEventListener("keyup", modalCloseHandler);
+    },
+  }
+);
 
 gallery.addEventListener("click", (evt) => {
   evt.preventDefault();
@@ -31,5 +49,3 @@ gallery.addEventListener("click", (evt) => {
 
   instance.show();
 });
-
-gallery.insertAdjacentHTML("afterbegin", itemsMarkup);
